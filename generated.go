@@ -2750,6 +2750,5 @@ type Mutation {
     createTodo(input: NewTodo!): Todo!
     deleteUser(id: ID!): Boolean!
     deleteTodo(id: ID!): Boolean!
-
 }`},
 )

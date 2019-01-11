@@ -19,6 +19,11 @@ func main() {
 		panic(err)
 	}
 
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+
 	todos_db.CreateTablesIfNotExist(db)
 
 	port := os.Getenv("PORT")
