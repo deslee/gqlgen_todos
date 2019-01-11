@@ -1,0 +1,34 @@
+type Todo {
+    id: ID!
+    text: String!
+    user: User!
+}
+
+type User {
+    id: ID!
+    name: String!
+    todos: [Todo!]!
+}
+
+type Query {
+    users: [User!]!
+    user(id: ID!): User!
+    todos: [Todo!]!
+    todo(id: ID!): Todo!
+}
+
+input NewTodo {
+    text: String!
+    userId: String!
+}
+
+input NewUser {
+    name: String!
+}
+
+type Mutation {
+    createUser(input: NewUser!): User!
+    createTodo(input: NewTodo!): Todo!
+    deleteUser(id: ID!): Boolean!
+    deleteTodo(id: ID!): Boolean!
+}
