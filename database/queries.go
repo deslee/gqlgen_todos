@@ -48,7 +48,7 @@ func GetUsers(db *sql.DB) ([]models.User, error) {
 	)
 
 	rows, err := db.Query(`SELECT ID, Name from Users`)
-	if err != nil {
+	if err != nil && err != sql.ErrNoRows {
 		panic(err)
 	}
 	defer rows.Close()
@@ -72,7 +72,7 @@ func GetUser(db *sql.DB, id string) (models.User, error) {
 	)
 
 	err := db.QueryRow(`SELECT Name from Users where ID = ?`, id).Scan(&name)
-	if err != nil {
+	if err != nil && err != sql.ErrNoRows {
 		panic(err)
 	}
 
@@ -88,7 +88,7 @@ func GetTodos(db *sql.DB) ([]models.Todo, error) {
 	)
 
 	rows, err := db.Query(`SELECT ID, Text, UserID from Todos`)
-	if err != nil {
+	if err != nil && err != sql.ErrNoRows {
 		panic(err)
 	}
 	defer rows.Close()
@@ -114,7 +114,7 @@ func GetTodosForUser(db *sql.DB, userID string) ([]models.Todo, error) {
 	)
 
 	rows, err := db.Query(`SELECT ID, Text FROM Todos WHERE UserID = ?`, userID)
-	if err != nil {
+	if err != nil && err != sql.ErrNoRows {
 		panic(err)
 	}
 	defer rows.Close()
@@ -139,9 +139,25 @@ func GetTodo(db *sql.DB, id string) (models.Todo, error) {
 	)
 
 	err := db.QueryRow(`SELECT Text, UserID from Todos where ID = ?`, id).Scan(&text, &userID)
-	if err != nil {
+	if err != nil && err != sql.ErrNoRows {
 		panic(err)
 	}
 
 	return models.Todo{ID: id, UserID: userID}, nil
+}
+
+func DeleteTodo(db *sql.DB, id string) error {
+	_, err := db.Exec(`DELETE FROM Todos WHERE ID=?`, id)
+	if err != nil {
+		panic(err)
+	}
+	return nil
+}
+
+func DeleteUser(db *sql.DB, id string) error {
+	_, err := db.Exec(`DELETE FROM Users WHERE ID=?`, id)
+	if err != nil {
+		panic(err)
+	}
+	return nil
 }

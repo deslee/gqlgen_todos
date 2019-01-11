@@ -14,6 +14,6 @@ resolver:
   type: Resolver
 models:
   Todo:
-    model: github.com/deslee/gqlgen_todos.Todo
+    model: github.com/deslee/gqlgen_todos/models.Todo
   User:
-    model: github.com/deslee/gqlgen_todos.User
+    model: github.com/deslee/gqlgen_todos/models.User

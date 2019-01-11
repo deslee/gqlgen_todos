@@ -11,6 +11,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/deslee/gqlgen_todos/models"
 	"github.com/vektah/gqlparser"
 	"github.com/vektah/gqlparser/ast"
 )
@@ -69,22 +70,22 @@ type ComplexityRoot struct {
 }
 
 type MutationResolver interface {
-	CreateUser(ctx context.Context, input NewUser) (User, error)
-	CreateTodo(ctx context.Context, input NewTodo) (Todo, error)
+	CreateUser(ctx context.Context, input NewUser) (models.User, error)
+	CreateTodo(ctx context.Context, input NewTodo) (models.Todo, error)
 	DeleteUser(ctx context.Context, id string) (bool, error)
 	DeleteTodo(ctx context.Context, id string) (bool, error)
 }
 type QueryResolver interface {
-	Users(ctx context.Context) ([]User, error)
-	User(ctx context.Context, id string) (User, error)
-	Todos(ctx context.Context) ([]Todo, error)
-	Todo(ctx context.Context, id string) (Todo, error)
+	Users(ctx context.Context) ([]models.User, error)
+	User(ctx context.Context, id string) (models.User, error)
+	Todos(ctx context.Context) ([]models.Todo, error)
+	Todo(ctx context.Context, id string) (models.Todo, error)
 }
 type TodoResolver interface {
-	User(ctx context.Context, obj *Todo) (User, error)
+	User(ctx context.Context, obj *models.Todo) (models.User, error)
 }
 type UserResolver interface {
-	Todos(ctx context.Context, obj *User) ([]Todo, error)
+	Todos(ctx context.Context, obj *models.User) ([]models.Todo, error)
 }
 
 func field_Mutation_createUser_args(rawArgs map[string]interface{}) (map[string]interface{}, error) {
@@ -485,7 +486,7 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 		}
 		return graphql.Null
 	}
-	res := resTmp.(User)
+	res := resTmp.(models.User)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 
@@ -519,7 +520,7 @@ func (ec *executionContext) _Mutation_createTodo(ctx context.Context, field grap
 		}
 		return graphql.Null
 	}
-	res := resTmp.(Todo)
+	res := resTmp.(models.Todo)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 
@@ -683,7 +684,7 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]User)
+	res := resTmp.([]models.User)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 
@@ -749,7 +750,7 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 		}
 		return graphql.Null
 	}
-	res := resTmp.(User)
+	res := resTmp.(models.User)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 
@@ -777,7 +778,7 @@ func (ec *executionContext) _Query_todos(ctx context.Context, field graphql.Coll
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]Todo)
+	res := resTmp.([]models.Todo)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 
@@ -843,7 +844,7 @@ func (ec *executionContext) _Query_todo(ctx context.Context, field graphql.Colle
 		}
 		return graphql.Null
 	}
-	res := resTmp.(Todo)
+	res := resTmp.(models.Todo)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 
@@ -917,7 +918,7 @@ func (ec *executionContext) _Query___schema(ctx context.Context, field graphql.C
 var todoImplementors = []string{"Todo"}
 
 // nolint: gocyclo, errcheck, gas, goconst
-func (ec *executionContext) _Todo(ctx context.Context, sel ast.SelectionSet, obj *Todo) graphql.Marshaler {
+func (ec *executionContext) _Todo(ctx context.Context, sel ast.SelectionSet, obj *models.Todo) graphql.Marshaler {
 	fields := graphql.CollectFields(ctx, sel, todoImplementors)
 
 	var wg sync.WaitGroup
@@ -960,7 +961,7 @@ func (ec *executionContext) _Todo(ctx context.Context, sel ast.SelectionSet, obj
 }
 
 // nolint: vetshadow
-func (ec *executionContext) _Todo_id(ctx context.Context, field graphql.CollectedField, obj *Todo) graphql.Marshaler {
+func (ec *executionContext) _Todo_id(ctx context.Context, field graphql.CollectedField, obj *models.Todo) graphql.Marshaler {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
 	rctx := &graphql.ResolverContext{
@@ -987,7 +988,7 @@ func (ec *executionContext) _Todo_id(ctx context.Context, field graphql.Collecte
 }
 
 // nolint: vetshadow
-func (ec *executionContext) _Todo_text(ctx context.Context, field graphql.CollectedField, obj *Todo) graphql.Marshaler {
+func (ec *executionContext) _Todo_text(ctx context.Context, field graphql.CollectedField, obj *models.Todo) graphql.Marshaler {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
 	rctx := &graphql.ResolverContext{
@@ -1014,7 +1015,7 @@ func (ec *executionContext) _Todo_text(ctx context.Context, field graphql.Collec
 }
 
 // nolint: vetshadow
-func (ec *executionContext) _Todo_user(ctx context.Context, field graphql.CollectedField, obj *Todo) graphql.Marshaler {
+func (ec *executionContext) _Todo_user(ctx context.Context, field graphql.CollectedField, obj *models.Todo) graphql.Marshaler {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
 	rctx := &graphql.ResolverContext{
@@ -1034,7 +1035,7 @@ func (ec *executionContext) _Todo_user(ctx context.Context, field graphql.Collec
 		}
 		return graphql.Null
 	}
-	res := resTmp.(User)
+	res := resTmp.(models.User)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 
@@ -1044,7 +1045,7 @@ func (ec *executionContext) _Todo_user(ctx context.Context, field graphql.Collec
 var userImplementors = []string{"User"}
 
 // nolint: gocyclo, errcheck, gas, goconst
-func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *User) graphql.Marshaler {
+func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *models.User) graphql.Marshaler {
 	fields := graphql.CollectFields(ctx, sel, userImplementors)
 
 	var wg sync.WaitGroup
@@ -1087,7 +1088,7 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 }
 
 // nolint: vetshadow
-func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *User) graphql.Marshaler {
+func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *models.User) graphql.Marshaler {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
 	rctx := &graphql.ResolverContext{
@@ -1114,7 +1115,7 @@ func (ec *executionContext) _User_id(ctx context.Context, field graphql.Collecte
 }
 
 // nolint: vetshadow
-func (ec *executionContext) _User_name(ctx context.Context, field graphql.CollectedField, obj *User) graphql.Marshaler {
+func (ec *executionContext) _User_name(ctx context.Context, field graphql.CollectedField, obj *models.User) graphql.Marshaler {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
 	rctx := &graphql.ResolverContext{
@@ -1141,7 +1142,7 @@ func (ec *executionContext) _User_name(ctx context.Context, field graphql.Collec
 }
 
 // nolint: vetshadow
-func (ec *executionContext) _User_todos(ctx context.Context, field graphql.CollectedField, obj *User) graphql.Marshaler {
+func (ec *executionContext) _User_todos(ctx context.Context, field graphql.CollectedField, obj *models.User) graphql.Marshaler {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
 	rctx := &graphql.ResolverContext{
@@ -1161,7 +1162,7 @@ func (ec *executionContext) _User_todos(ctx context.Context, field graphql.Colle
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]Todo)
+	res := resTmp.([]models.Todo)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 

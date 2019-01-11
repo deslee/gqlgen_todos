@@ -33,10 +33,18 @@ func (r *mutationResolver) CreateTodo(ctx context.Context, input NewTodo) (model
 	return todos_db.CreateTodo(r.Db, input.Text, input.UserID)
 }
 func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (bool, error) {
-	panic("not implemented")
+	err := todos_db.DeleteUser(r.Db, id)
+	if err != nil {
+		panic(err)
+	}
+	return true, nil
 }
 func (r *mutationResolver) DeleteTodo(ctx context.Context, id string) (bool, error) {
-	panic("not implemented")
+	err := todos_db.DeleteTodo(r.Db, id)
+	if err != nil {
+		panic(err)
+	}
+	return true, nil
 }
 
 type queryResolver struct{ *Resolver }
