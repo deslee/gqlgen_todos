@@ -77,9 +77,9 @@ type MutationResolver interface {
 }
 type QueryResolver interface {
 	Users(ctx context.Context) ([]models.User, error)
-	User(ctx context.Context, id string) (models.User, error)
+	User(ctx context.Context, id string) (*models.User, error)
 	Todos(ctx context.Context) ([]models.Todo, error)
-	Todo(ctx context.Context, id string) (models.Todo, error)
+	Todo(ctx context.Context, id string) (*models.Todo, error)
 }
 type TodoResolver interface {
 	User(ctx context.Context, obj *models.Todo) (models.User, error)
@@ -625,9 +625,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			wg.Add(1)
 			go func(i int, field graphql.CollectedField) {
 				out.Values[i] = ec._Query_user(ctx, field)
-				if out.Values[i] == graphql.Null {
-					invalid = true
-				}
 				wg.Done()
 			}(i, field)
 		case "todos":
@@ -643,9 +640,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			wg.Add(1)
 			go func(i int, field graphql.CollectedField) {
 				out.Values[i] = ec._Query_todo(ctx, field)
-				if out.Values[i] == graphql.Null {
-					invalid = true
-				}
 				wg.Done()
 			}(i, field)
 		case "__type":
@@ -745,16 +739,17 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 		return ec.resolvers.Query().User(rctx, args["id"].(string))
 	})
 	if resTmp == nil {
-		if !ec.HasError(rctx) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(models.User)
+	res := resTmp.(*models.User)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 
-	return ec._User(ctx, field.Selections, &res)
+	if res == nil {
+		return graphql.Null
+	}
+
+	return ec._User(ctx, field.Selections, res)
 }
 
 // nolint: vetshadow
@@ -839,16 +834,17 @@ func (ec *executionContext) _Query_todo(ctx context.Context, field graphql.Colle
 		return ec.resolvers.Query().Todo(rctx, args["id"].(string))
 	})
 	if resTmp == nil {
-		if !ec.HasError(rctx) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(models.Todo)
+	res := resTmp.(*models.Todo)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 
-	return ec._Todo(ctx, field.Selections, &res)
+	if res == nil {
+		return graphql.Null
+	}
+
+	return ec._Todo(ctx, field.Selections, res)
 }
 
 // nolint: vetshadow
@@ -2732,9 +2728,9 @@ type User {
 
 type Query {
     users: [User!]!
-    user(id: ID!): User!
+    user(id: ID!): User
     todos: [Todo!]!
-    todo(id: ID!): Todo!
+    todo(id: ID!): Todo
 }
 
 input NewTodo {

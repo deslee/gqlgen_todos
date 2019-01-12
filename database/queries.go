@@ -66,17 +66,20 @@ func GetUsers(db *sql.DB) ([]models.User, error) {
 	return users, nil
 }
 
-func GetUser(db *sql.DB, id string) (models.User, error) {
+func GetUser(db *sql.DB, id string) (*models.User, error) {
 	var (
 		name string
 	)
 
 	err := db.QueryRow(`SELECT Name from Users where ID = ?`, id).Scan(&name)
-	if err != nil && err != sql.ErrNoRows {
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		panic(err)
 	}
 
-	return models.User{ID: id, Name: name}, nil
+	return &models.User{ID: id, Name: name}, nil
 }
 
 func GetTodos(db *sql.DB) ([]models.Todo, error) {
@@ -132,18 +135,21 @@ func GetTodosForUser(db *sql.DB, userID string) ([]models.Todo, error) {
 	return todos, nil
 }
 
-func GetTodo(db *sql.DB, id string) (models.Todo, error) {
+func GetTodo(db *sql.DB, id string) (*models.Todo, error) {
 	var (
 		text string
 		userID string
 	)
 
 	err := db.QueryRow(`SELECT Text, UserID from Todos where ID = ?`, id).Scan(&text, &userID)
-	if err != nil && err != sql.ErrNoRows {
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		panic(err)
 	}
 
-	return models.Todo{ID: id, UserID: userID}, nil
+	return &models.Todo{ID: id, UserID: userID}, nil
 }
 
 func DeleteTodo(db *sql.DB, id string) error {

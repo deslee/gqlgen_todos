@@ -52,21 +52,22 @@ type queryResolver struct{ *Resolver }
 func (r *queryResolver) Users(ctx context.Context) ([]models.User, error) {
 	return todos_db.GetUsers(r.Db)
 }
-func (r *queryResolver) User(ctx context.Context, id string) (models.User, error) {
+func (r *queryResolver) User(ctx context.Context, id string) (*models.User, error) {
 	return todos_db.GetUser(r.Db, id)
 }
 
 func (r *queryResolver) Todos(ctx context.Context) ([]models.Todo, error) {
 	return todos_db.GetTodos(r.Db)
 }
-func (r *queryResolver) Todo(ctx context.Context, id string) (models.Todo, error) {
+func (r *queryResolver) Todo(ctx context.Context, id string) (*models.Todo, error) {
 	return todos_db.GetTodo(r.Db, id)
 }
 
 type todoResolver struct{ *Resolver }
 
 func (r *todoResolver) User(ctx context.Context, obj *models.Todo) (models.User, error) {
-	return todos_db.GetUser(r.Db, obj.UserID)
+	user, err := todos_db.GetUser(r.Db, obj.UserID)
+	return *user, err
 }
 
 type userResolver struct{ *Resolver }
